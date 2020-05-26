@@ -1,0 +1,56 @@
+body {
+    background-color: cornflowerblue;
+}
+
+header > h1 {
+    text-align: center;
+    font-size: 3rem;
+    margin-top: 3rem;
+}
+
+header > p {
+    text-align: center;
+    font-size: 1.5rem;
+    margin-top: 1rem;
+}
+
+.board {
+    width: 600px;
+    height: 600px;
+    background-color: white;
+    margin: 2rem auto 0 auto;
+    display: flex;
+    position: relative;
+}
+
+.board-column {
+    width: 200px;
+    height: 600px;
+}
+
+.verticle-line-1, .verticle-line-2 {
+    height: 600px;
+    width: 12px;
+    background-color: black;
+}
+
+.verticle-line-1 {
+    position: absolute;
+    left: 194px;
+}
+
+.verticle-line-2 {
+    position: absolute;
+    left: 394px;
+}
+
+.horizontal-line {
+    background-color: black;
+    height: 12px;
+    width: 100%;
+}
+
+.board-location {
+    width: 100%;
+    height: 200px;
+}
