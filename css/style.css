@@ -52,5 +52,19 @@ header > p {
 
 .board-location {
     width: 100%;
-    height: 200px;
+    height: 192px;
+}
+
+.message-board {
+    width: 100%;
+    height: 2rem;
+    margin: 1rem auto 0 auto;
+    color: white;
+    text-align: center;
+}
+
+.board-location > p {
+    text-align: center;
+    margin: auto;
+    font-size: 10rem;
 }
