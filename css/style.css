@@ -104,6 +104,46 @@ form input {
     margin-top: -150px;
 }
 
+.winning-board > span {
+    position: absolute;
+    top: 1px;
+    right: 5px;
+    font-size: 2rem;
+    margin: 0;
+    padding: 0;
+    cursor: pointer;
+}
+
+.winning-board > h2 {
+    font-size: 2rem;
+    text-decoration: underline;
+    text-align: center;
+    margin-top: 2rem;
+}
+
+.winning-board-show {
+    top: 50%;
+    transition: top 1.5s;
+}
+
+.winner-paragraph {
+    margin-top: 5rem;
+    font-size: 1.25rem;
+    text-align: center;
+}
+
 .disabled {
     background-color: grey;
+}
+
+.btn-reset {
+    display: block;
+    border-style: none;
+    border-radius: 5px;
+    margin: 60px auto 0 auto;
+    background-color: cornflowerblue;
+    color: white;
+    font-weight: 600;
+    font-size: 2rem;
+
 }

@@ -5,6 +5,9 @@
     const p1InfoField = document.querySelector('#p1-name')
     const p2InfoField = document.querySelector('#p2-name')
     const submitFormBtn = document.querySelector('.form-submit');
+    const winningBoard = document.querySelector('.winning-board');
+    const closeSpan = document.querySelector('.winning-board > span');
+    const resetBtn = document.querySelector('.btn-reset');
 
     // Event listeners
     for(let i = 0; i < boardLocations.length; i ++) {
@@ -19,7 +22,18 @@
         game.startGame(p1Name, p2Name);
         for(let i = 0; i < boardLocations.length; i ++) {
             boardLocations[i].classList.remove('disabled');
+            boardLocations[i].textContent = '';
         }
+        event.target.textContent = 'Reset Game';
+    });
+
+    closeSpan.addEventListener('click', (event) => {
+        winningBoard.classList.remove('winning-board-show');
+    });
+
+    resetBtn.addEventListener('click', (event) => {
+        submitFormBtn.click();
+        closeSpan.click();
     });
 
     // Player Factory
@@ -35,7 +49,7 @@
 
     // Game Module
     const game = (() => {
-        const boardState = ['', '', '', '', '', '', '', '', ''];
+        let boardState = ['', '', '', '', '', '', '', '', ''];
         let players = [];
         let currPlayer;
         let shouldPlayGame = false;
@@ -44,6 +58,7 @@
             players = [Player(name1, 'X'), Player(name2, 'O')];
             shouldPlayGame = true;
             currPlayer = players[0];
+            boardState = ['', '', '', '', '', '', '', '', ''];
         }
 
         function takeTurn(id) {
@@ -54,8 +69,10 @@
                 p.textContent = currPlayer.getSymbol();
                 boardLocations[id - 1].appendChild(p);
                 if(checkWinConditions()) {
-                    messageBoard.textContent = `${currPlayer.getName()} wins!`;
+                    messageBoard.textContent = "Reload the page to play again!";
                     shouldPlayGame = false;
+                    winningBoard.classList.add('winning-board-show');
+                    document.querySelector('.winner-paragraph').textContent = `${currPlayer.getName()} is the winnier!`;
                 } else if(checkTie()) {
                     shouldPlayGame = false;
                     console.log('tie');
@@ -115,8 +132,9 @@
         return {takeTurn, startGame};
     })();
 
-    // Helper function
+    // Helper functions
     function takeTurn(event) {
         game.takeTurn(event.target.getAttribute('data-id'));
     }
+
 })();
