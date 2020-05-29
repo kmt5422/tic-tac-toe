@@ -1,36 +1,78 @@
+// TODOS
+// Currently the game startes before user's can input their name
+// rework code to prevent this from happening. 
+
 (function(){
     //DOM elements
     const boardLocations = document.querySelectorAll('.board-location');
     const messageBoard = document.querySelector('.message-board');
+    const p1InfoField = document.querySelector('#p1-name')
+    const p2InfoField = document.querySelector('#p2-name')
+    const submitFormBtn = document.querySelector('.form-submit');
+
+    // Global vars
+    let p1Name = '';
+    let p2Name = '';
 
     // Event listeners
     for(let i = 0; i < boardLocations.length; i ++) {
         boardLocations[i].addEventListener('click', takeTurn);
     }
 
+    submitFormBtn.addEventListener('click', (event) => {
+        event.preventDefault();
+        p1Name = p1InfoField.value;
+        p2Name = p2InfoField.value;
+    });
+
+    // Player Factory
+    function Player(playerName, playerSymbol) {
+        const name = playerName;
+        const symbol = playerSymbol
+
+        const getName = () => name;
+        const getSymbol = () => symbol;
+
+        return {getName, getSymbol};
+    }
+
     // Game Module
-    const game = (() => {
+    const game = ((name1, name2) => {
         const boardState = ['', '', '', '', '', '', '', '', ''];
-        const boardSymbols = {player1: 'X', player2: 'O'};
-        let currPlayer = 'player1';
+        const players = [Player(name1, 'X'), Player(name2, 'O')];
+        let currPlayer = players[0];
         let shouldPlayGame = true;
 
         function takeTurn(id) {
-            if(boardState[id - 1] === '' && shouldPlayGame) {
-                boardState[id - 1] = boardSymbols[currPlayer];
+            if(!shouldPlayGame) return;
+            if(boardState[id - 1] === '') {
+                boardState[id - 1] = currPlayer.getSymbol();
                 const p = document.createElement('p');
-                p.textContent = boardSymbols[currPlayer];
+                p.textContent = currPlayer.getSymbol();
                 boardLocations[id - 1].appendChild(p);
                 if(checkWinConditions()) {
-                    messageBoard.textContent = `${currPlayer} wins!`;
+                    messageBoard.textContent = `${currPlayer.getName()} wins!`;
                     shouldPlayGame = false;
-                    return;
+                } else if(checkTie()) {
+                    shouldPlayGame = false;
+                    console.log('tie');
+                    messageBoard.textContent = 'It\'s a tie!';
+                } else {
+                    messageBoard.textContent = '';
+                    changePlayerTurn();
                 }
-                messageBoard.textContent = '';
-                changePlayerTurn();
             } else {
                 messageBoard.textContent = 'You cannot move there!'
             }
+        }
+
+        function checkTie() {
+            for(let symbol of boardState) {
+                if(symbol == '') {
+                    return false;
+                }
+            }
+            return true;
         }
 
         function checkWinConditions() {
@@ -61,18 +103,17 @@
         }
 
         function changePlayerTurn() {
-            if(currPlayer === 'player1') {
-                currPlayer = 'player2';
+            if(currPlayer === players[0]) {
+                currPlayer = players[1];
             } else {
-                currPlayer = 'player1';
+                currPlayer = players[0];
             }
         }
         return {takeTurn};
-    })();
+    })(p1Name, p2Name);
 
     // Helper function
     function takeTurn(event) {
         game.takeTurn(event.target.getAttribute('data-id'));
-        console.log(game);
     }
 })();
