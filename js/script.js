@@ -1,7 +1,3 @@
-// TODOS
-// Currently the game startes before user's can input their name
-// rework code to prevent this from happening. 
-
 (function(){
     //DOM elements
     const boardLocations = document.querySelectorAll('.board-location');
@@ -10,19 +6,20 @@
     const p2InfoField = document.querySelector('#p2-name')
     const submitFormBtn = document.querySelector('.form-submit');
 
-    // Global vars
-    let p1Name = '';
-    let p2Name = '';
-
     // Event listeners
     for(let i = 0; i < boardLocations.length; i ++) {
         boardLocations[i].addEventListener('click', takeTurn);
+        boardLocations[i].classList.add('disabled');
     }
 
     submitFormBtn.addEventListener('click', (event) => {
         event.preventDefault();
-        p1Name = p1InfoField.value;
-        p2Name = p2InfoField.value;
+        const p1Name = p1InfoField.value;
+        const p2Name = p2InfoField.value;
+        game.startGame(p1Name, p2Name);
+        for(let i = 0; i < boardLocations.length; i ++) {
+            boardLocations[i].classList.remove('disabled');
+        }
     });
 
     // Player Factory
@@ -37,11 +34,17 @@
     }
 
     // Game Module
-    const game = ((name1, name2) => {
+    const game = (() => {
         const boardState = ['', '', '', '', '', '', '', '', ''];
-        const players = [Player(name1, 'X'), Player(name2, 'O')];
-        let currPlayer = players[0];
-        let shouldPlayGame = true;
+        let players = [];
+        let currPlayer;
+        let shouldPlayGame = false;
+
+        function startGame(name1, name2) {
+            players = [Player(name1, 'X'), Player(name2, 'O')];
+            shouldPlayGame = true;
+            currPlayer = players[0];
+        }
 
         function takeTurn(id) {
             if(!shouldPlayGame) return;
@@ -109,8 +112,8 @@
                 currPlayer = players[0];
             }
         }
-        return {takeTurn};
-    })(p1Name, p2Name);
+        return {takeTurn, startGame};
+    })();
 
     // Helper function
     function takeTurn(event) {
